@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Test Shopee Module</title>
+  </head>
+  <body>
+    <script src="./debug-utils.js"></script>
+    <script src="./2.27.224_deobfuscated.js"></script>
+    <script>
+      (async () => {
+        const t = {
+          setModule(name, module, options) {
+            window._loadedModules = window._loadedModules || {};
+            window._loadedModules[name] = { module, options };
+          },
+        };
+        const moduleEntries = self.mfeModules[0];
+        const loaderFunction = moduleEntries.find(
+          (entry) => typeof entry === "function"
+        );
+        await loaderFunction(t)();
+        const module = Object.values(window._loadedModules || {})[0]?.module;
+        url =
+          "https://shopee.tw/api/v4/pdp/get_pc?item_id=6387512611&shop_id=116026822&tz_offset_minutes=300&detail_level=0";
+        body_str = undefined;
+        if (module) {
+          window.shopifyModule = module;
+          let sec_code = await module.default.generateSignEntry(url, body_str);
+          console.log(sec_code);
+        }
+      })();
+    </script>
+  </body>
+</html>
